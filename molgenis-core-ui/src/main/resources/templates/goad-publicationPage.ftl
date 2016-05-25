@@ -13,6 +13,12 @@
 			<div id="NoDEGMessage" class="alert alert-danger" role="alert">
 						<strong>Oops!</strong> No significant differentially expressed genes where found.<br/>Please try again.
 			</div>
+			
+				<div id="analysis_info">
+					<strong> Quantitative Expression (QE)</strong> analysis can be used to determine which genes are expressed in particular cell type and to what degree. <br/>
+					<strong>Differential Expression (DE)</strong> analysis can be used to generate gene lists containing differentially expressed genes with the associated log fold changes and multiple testing corrected p-values between two conditions of interest (A vs. B).
+				</div>
+			
 			<div class="btn-group btn-group-justified">
 				<div class="btn-group">
 					<button type="button" id="QEbutton" class="btn btn-default btn-lg">QE</button>
@@ -22,11 +28,6 @@
 				</div>
 			</div>
 			<br/>
-			
-			<div id="QE_info">
-				<p>The Quantitative Expression (QE) analysis can be used to determine which genes are expressed in particular cell type and to what degree. </p>
-				<button type="button" class="btn btn-default col-md-6 col-md-offset-3" id="submitQEbutton">Submit</button>
-			</div>
 			
 			<div id="QE_content">
 					<ul id="QE_tabs" class="nav nav-tabs" role="tablist">
@@ -68,13 +69,9 @@
 					</div>
 				</div>
 			
-			<div id="DE_info">
-				The Differential Expression (DE) analysis can be used to generate gene lists differentially expressed genes with the associated log fold changes and multiple testing corrected p-values between two conditions of interest (A vs. B).
-			</div>
-			
 			<div id="selectBar" class="DE">
 				<select id="selectConditions" class="DE" multiple="multiple"></select><br/>
-				<button type="button" class="btn btn-default col-md-6 col-md-offset-3 DE" id="submitDEbutton">Submit</button>
+				<button type="button" class="btn btn-default col-md-6 col-md-offset-3 DE" id="submitDEbutton">Perform DE analysis</button>
 			</div>
 			<br/>
 			<br/>
@@ -82,7 +79,7 @@
 			<div class="row DE">
 				<div id="scatterplot" class="col-md-7 DE"></div>
 				<div id="DETableContent" class="col-md-5 DE">
-					<div id="searchBar_DE" class="input-group .col-md-3 .col-md-offset-2 DE">				
+					<div id="searchBar_DE" class="input-group DE">				
 						<input id="DEsearch" class="form-control" type="text" placeholder="Search gene..." />
 					</div>
 					<br/>

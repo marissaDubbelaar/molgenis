@@ -23,10 +23,10 @@ $(document).ready(function () {
 			// For each known sample the data is obtained.
 			$.each(data, function(i, item){
 				// The data is saved when the sample is not known yet.
-				if ($.inArray(data[i]["Tissue"] + " " + data[i]["Celltype"] + " " + data[i]["Strain"] + " " + data[i]["Age"] + " " + data[i]["RepNumber"], uniqueConditions) === -1 ){
-					uniqueConditions.push(data[i]["Tissue"] + " " + data[i]["Celltype"] + " " + data[i]["Strain"] + " " + data[i]["Age"] + " " + data[i]["RepNumber"]);
+				if ($.inArray(data[i]["Tissue"] + " " + data[i]["Celltype"] + " " + data[i]["Strain"] + " " + data[i]["Age"], uniqueConditions) === -1 ){
+					uniqueConditions.push(data[i]["Tissue"] + " " + data[i]["Celltype"] + " " + data[i]["Strain"] + " " + data[i]["Age"]);
 					// Variable sampleInfo is made to make sure that one sample is noted as option.	
-					var sampleInfo = data[i]["Tissue"] + " " + data[i]["Celltype"] + " " + data[i]["Strain"] + " " + data[i]["Age"] + " " + data[i]["RepNumber"];
+					var sampleInfo = data[i]["Tissue"] + " " + data[i]["Celltype"] + " " + data[i]["Strain"] + " " + data[i]["Age"];
 					// Information is pushed to the variable studyConditions.
 					studyConditions.push('<option value="' + data[i]["SRA"] + '">' + sampleInfo + '</option>');
 				}
@@ -63,6 +63,7 @@ $(document).ready(function () {
 	$("body").on("click", "#DEbutton", function(){
 		// QE content that might be visible is hidden.
 		$("#QE_info").hide();
+		$("#analysis_info").hide();
 		$("#QE_content").hide();
 		$("#searchBar_QE").hide();
 		$("#submitQEbutton").hide();
@@ -92,14 +93,22 @@ $(document).ready(function () {
 		// and the for-control is reset.
 		$("#DE_info").hide();
 		$(".table-scroll").empty();
+		$("#firstCondition").empty();
 		$(".form-control").trigger("reset");
 		// When there are two conditions chosen the API for the scatterplot and the DE table is called.
 		var count = $("#selectConditions :selected").length;
 		if (count === 2) {
 			var tableContent = [];
+			
+			$.get("/api/v2/"+GEODOnPage[0].replace(/-/g,'')+"_targets?q=SRA=="+$("#selectConditions").val()[0]).done(
+					function(data){ 
+						var data = data["items"];
+						$(".row.DE").append("<div id='firstCondition' class='col-md-11 col-md-offset-1 DE'><b>"+ capitalizeEachWord(data[0]["Description"].replace(/-|_/g,' ')) + "</b></div>")
+			});
+			
 			$.get("/scripts/New_DE_ScatterPlot/run?entityName="+GEODOnPage[0].replace(/-/g,'')+"&condition1="+$("#selectConditions").val()[0]+"&condition2="+$("#selectConditions").val()[1]+"&targetFile="+GEODOnPage[0].replace(/-/g,'')+"_targets&organism="+organismOnPage[0].replace(/ /g, "+")).done(
 				function(data){
-				// The necessary information from the scatterD3 plot is obtained
+					// The necessary information from the scatterD3 plot is obtained
 		   			var regexData = /(\<div id="htmlwidget_container"\>\n[A-z0-9 \n\<\=\"\-\:\;\>\/\!\.]+)\<script type="application\/json" data-for="htmlwidget.+\>(\{.+\})/g;
 					match = regexData.exec(data);
 					if (match !== null) {
@@ -107,7 +116,7 @@ $(document).ready(function () {
 						// The necessary information for the scatterplot is written to the div scatterplot.
 						$("#scatterplot").html(match[1]);
 						// The render function creates the interactive scatterplot.
-						//render('#scatterplot', obj.x);
+						render('#scatterplot', obj.x);
 						// The extra div that is created by the render function is removed.
 						$('div[id^="htmlwidget"]').remove()
 						// The column name which is used for the legend is replaced bij 'p-value'.
@@ -119,17 +128,13 @@ $(document).ready(function () {
 					function(data){
 						if (data.startsWith('Login success[1] "No differentially expressed genes where found')) {
 							$("#NoDEGMessage").show();
-							$(".row.DE").show();
-							$("#DETable").hide();
-							$("#DETableContent").hide();
-							$("#scatterplot").hide();
-						} else { 
+						} else {
 							// The DE table is added to the div DETable.
 							$("#DETable").append(
-							'<table id="countTable" class="table table-striped table-hover table-condensed table-responsive header-fixed sortable">' +
-								'<thead><tr><th>Genesymbol</th><th>LogFC</th><th>FDR</th></tr></thead>' +
-								'<tbody id="DEcontent" class="searchable"></tbody>' +
-							'</table>');
+									'<table id="countTable" class="table table-striped table-hover table-condensed table-responsive header-fixed sortable">' +
+										'<thead><tr><th>Genesymbol</th><th>LogFC</th><th>FDR</th></tr></thead>' +
+										'<tbody id="DEcontent" class="searchable"></tbody>' +
+									'</table>');
 							// The data information obtained from the API is splitted by new lines and spaces.
 							var stringArray = data.split(/[ ,\n"]+/);
 							// Starting from the 5th element the data is saved into the variable tableContent.
@@ -163,7 +168,8 @@ $(document).ready(function () {
 							$("#scatterplot").show();
 							$(".row.DE").show();
 							searchBar("#DEsearch");	
-					}
+				}
+
 				});
 			} else {
 				// An error is given when there is only one condition to choose from.
@@ -175,16 +181,6 @@ $(document).ready(function () {
 	//---------------------------------------------//
 	//QE functions of the publication part of GOAD.//
 	//---------------------------------------------//
-	
-	// When clicking upon the QE button
-	$("body").on("click", "#QEbutton", function(){
-		$("#QE_info").show();
-		$("#submitQEbutton").show();
-		$("#DE_info").hide();
-		$("#QE_content").hide();
-		$("#selectBar").hide();
-		$(".row.DE").hide();
-	});
 
 	$("#DownloadQE").click(function (e) {
 		// Obtaining information from the header and the table body.
@@ -211,11 +207,9 @@ $(document).ready(function () {
 	});
 	
 	// When clicking upon the submit QE button
-	$("body").on("click", "#submitQEbutton", function(){
+	$("body").on("click", "#QEbutton", function(){
 		// The table-scroll is emptied when clicking the DE submit button
 		// and the for-control is reset.
-		$("#QE_info").hide();
-		$("#submitQEbutton").hide();
 		$(".table-scroll").empty();
 		$(".form-control").trigger("reset");
 		var attrNames = [];
@@ -229,7 +223,6 @@ $(document).ready(function () {
 			$.each(attr, function(t, types){
 				// The name of the cell type is obtained.
 				if(!(attr[t]["name"].endsWith("low") || attr[t]["name"].endsWith("high") || attr[t]["name"].endsWith("percentile"))){
-					// console.log(attr[t]["name"])
 					attrNames.push(attr[t]["name"]);
 					if (attr[t]["name"].length < 4){
 						// Cell types with a length of 4 are seen as an abbreviation and therefore written in uppercase.
@@ -260,14 +253,14 @@ $(document).ready(function () {
 						stringToAppend += '<tr class="TpmVals" id="'+ data[i][names] +'"><td><b>' + data[i][names] + '</b></td>';
 					} else if (n === attrNames.length - 1) {
 						// The last item is added and the row is closed.
-						stringToAppend += '<td>' + data[i][names] + '</td></tr>';
+						stringToAppend += '<td>' + parseFloat(data[i][names]).toFixed(3) + '</td></tr>';
 						// Information is added onto the div with id "tpmContent".
 						$('#tpmContent').append(stringToAppend);
 						// The string is emptied again.
 						stringToAppend = '';
 					} else {
 						// All items in between the first and last column are added.
-						stringToAppend += '<td>'+ data[i][names] +'</td>';
+						stringToAppend += '<td>'+ parseFloat(data[i][names]).toFixed(3) +'</td>';
 					}
 				});
 			});
@@ -278,6 +271,10 @@ $(document).ready(function () {
 				source: availableGenes, 
 				});
 			// Shows all of the necessary content used for the QE analysis.
+			$("#selectBar").hide();
+			$("#analysis_info").hide();
+			$("#DETableContent").hide();
+			$("#firstCondition").hide();
 			$("#QETable").show();
 			$("#QE_content").show();
 			$("#searchBar_QE").show();
@@ -289,7 +286,6 @@ $(document).ready(function () {
 		});
 		hideDE();
 	});
-
 
 	$("body").on("click", ".TpmVals", function(){
 		obtainTPMofGenes(GEODOnPage[0].replace(/-/g,''), $(this).attr("id"));

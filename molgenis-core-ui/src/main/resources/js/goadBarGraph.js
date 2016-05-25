@@ -1,11 +1,11 @@
 function createBarGraph(){
-	// The size of the bargraph is defined.
-	var margin = {top: 20, right: 20, bottom: 30, left: 40},
+	// The size of the bar graph is defined.
+	var margin = {top: 70, right: 20, bottom: 30, left: 40},
 		width = ($("#QE_content").width() * 0.85) - margin.left - margin.right,
 	    height = 500 - margin.top - margin.bottom;
 
 	var x0 = d3.scale.ordinal()
-	    .rangeRoundBands([0, width], .1);
+	    .rangeRoundBands([0, width*0.83], .1);
 
 	var x1 = d3.scale.ordinal();
 
@@ -24,9 +24,12 @@ function createBarGraph(){
 				"60-70 percentile: low expression",
 				"70-80 percentile: low expression",
 				"80-90 percentile: low expression",
-				"90-100 percentile: very low expression"
+				"90-100 percentile: very low expression",
+				"Not significantly expressed",
+				"Not expressed"
 	  			])
-	    .range(["#ff0000", 		//Red	
+	    .range([
+	    		"#ff0000", 		//Red	
 				"#ff6600",		//Orange
 				"#ffff00", 		//Yellow
 				"#ccff33", 		//Greenyellow 	
@@ -34,12 +37,12 @@ function createBarGraph(){
 				"#66ffff", 		//Turqoise
 				"#33ccff", 		//Darkturqoise
 				"#0000ff", 		//Blue
-				"#000033", 		//Darkblue
-				"#0000gg", 		//Midnightblue	    		
-				"#000000" 		//Black	    		
+				"#000099", 		//Darkblue
+				"#3333cc", 		//Midnightblue	    		
+				"#000000", 		//Black	 
+				"#666666", 		//Dark Grey	   
+				"#cccccc"		//Grey	      		
 				]); 	
-
-	    	//"#ff6600", "#ffff00", "#ccff33", "#66ff33", "#66ffff", "#33ccff", "#0000ff", "#0000gg", "#000033", "#000000"]);
 
 	// X axis is defined.
 	var xAxis = d3.svg.axis()
@@ -57,8 +60,12 @@ function createBarGraph(){
 	  .attr('class', 'd3-tip')
 	  .offset([-10, 0])
 	  .html(function(d) {
-	  	var percentileInfo = d.Percentile.split(": ")
-	    return "TPM value : " + d.TPM + "<br/><br/>TPM Low value : " + d.Low_TPM +"<br/><br/>TPM High value : " + d.High_TPM + "<br/><br/>" + capitalizeEachWord(percentileInfo[1])
+	  	if (d.Percentile[":"] === undefined) {
+	  		var percentileInfo = d.Percentile.split(": ");
+	  		return "TPM value : " + d.TPM + "<br/>TPM Low value : " + d.Low_TPM +"<br/>TPM High value : " + d.High_TPM + "<br/><br/>" + capitalizeEachWord(d.Percentile)
+	  	} else {
+	  		return "TPM value : " + d.TPM + "<br/>TPM Low value : " + d.Low_TPM +"<br/>TPM High value : " + d.High_TPM + "<br/><br/>" + capitalizeEachWord(percentileInfo[1])
+	  	}
 	})
 
 	// The svg is drawn and added into the div with the id "TPMdiv"
@@ -75,7 +82,8 @@ function createBarGraph(){
 	  // Defining the tpmTypes (these types will be drawn).
 	  var tpmTypes = ["TPM"];
 	  // var tpmTypes = ["Percentile"];
-	  var percentileTypes = ["0-5 percentile: very high expression", 
+	  var percentileTypes = [
+							"0-5 percentile: very high expression", 
 	  						"5-10 percentile: high expression",
 	  						"10-20 percentile: moderately high expression",
 	  						"20-30 percentile: moderately high expression",
@@ -85,7 +93,9 @@ function createBarGraph(){
 	  						"60-70 percentile: low expression",
 	  						"70-80 percentile: low expression",
 	  						"80-90 percentile: low expression",
-	  						"90-100 percentile: very low expression"];
+	  						"90-100 percentile: very low expression",
+	  						"Not significantly expressed",
+	  						"Not expressed"];
 
 	  // The tpmVals are obtained.
 	  bargraphData.forEach(function(d) {
@@ -145,16 +155,23 @@ function createBarGraph(){
 
 	  // Adds the color to the legend.
 	  legend.append("rect")
-	      .attr("x", width + 13)
+	      .attr("x", width)
 	      .attr("width", 18)
 	      .attr("height", 18)
 	      .style("fill", color);
 
 	  // Adds the names of the legend.
 	  legend.append("text")
-	      .attr("x", width + 7)
+	      .attr("x", width - 4)
 	      .attr("y", 9)
 	      .attr("dy", ".35em")
 	      .style("text-anchor", "end")
-	      .text(function(d) {var percentileNumber = d.split(": "); return capitalizeEachWord(percentileNumber[0]); });
+	      .text(function(d) {
+	      	if (d[":"] === undefined) {
+	  			var percentileNumber = d.split(": ");
+	  			return capitalizeEachWord(percentileNumber[0]);
+		  	} else {
+		  		return capitalizeEachWord(d);
+		  	}
+		  });
 }

@@ -558,7 +558,7 @@ function scatterD3() {
 
         var legend_color_domain = color_scale.domain().sort();
         var legend_color_scale = d3.scale.category10();
-
+        
         legend_color_scale
         .domain(legend_color_domain)
         .range(legend_color_domain.map(function(d) {return color_scale(d)}));
@@ -594,7 +594,7 @@ function scatterD3() {
         .attr("transform", "translate(" + dims.legend_x + "," + margin.legend_top + ")")
         .text(settings.col_lab)
         .call(legend_label_formatting);
-
+        
         legend.append("g")
         .attr("class", "color-legend")
         .attr("transform", "translate(" + dims.legend_x + "," + (margin.legend_top + 8) + ")")

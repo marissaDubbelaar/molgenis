@@ -51,7 +51,11 @@
 	color:#ffffff;
 }
 
-#selectBar, #contactInfo, #selectBarMessage, #errorLengthForSubmit, #publicationPart, #refreshPublications, #QE_content, #searchQE, #QE_table, #searchBar_DE, #genePart, #dashboard, #DE_info, #QE_info, #DownloadQE, #selectBarQE, #NoDEGMessage{
+#QETable, #searchBar_QE{
+	margin-bottom:5px;
+}
+
+#selectBar, #contactInfo, #selectBarMessage, #errorLengthForSubmit, #publicationPart, #refreshPublications, #QE_content, #searchQE, #QE_table, #searchBar_DE, #genePart, #dashboard, #analysis_info, #DownloadQE, #selectBarQE, #NoDEGMessage, #materialInfo{
 	display:none;
 	margin-bottom:1em;
 }
@@ -59,6 +63,17 @@
 #s2id_selectConditions, #informationStudy{
 	width:100% !important;
 	margin-bottom:1em !important;
+}
+
+.col-centered, #analysis_info{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.tick, .legend {
+	font-size:12px;
 }
 
 #submitDEbutton{
@@ -99,6 +114,8 @@
   background: rgba(0, 0, 0, 0.8);
   color: #fff;
   border-radius: 2px;
+  position: absolute;
+  text-align: center;
 }
 
 /* Creates a small triangle extender for the tooltip */

@@ -35,6 +35,12 @@ $(document).ready(function () {
 		returnHome();
 	});
 	
+	$("body").on("click", "#informationButton", function(){
+		returnHome();
+		$("#accordion").hide();
+		$("#materialInfo").show();
+	});
+	
 	$("body").on("click", "#geneSearch", function(){
 		var geneName = [];
 		var freqData = [];
@@ -275,6 +281,7 @@ function returnHome(){
 	hideDE();
 	hideQE();
 	$(".alert-danger").hide();
+	$("#materialInfo").hide();
 	$("#publicationPart").hide();
 	$("#contactInfo").hide();
 	$("#genePart").hide();
