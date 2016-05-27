@@ -13,7 +13,7 @@
 	<div class="btn-group btn-group-justified">
 		<div id="homeButton" class="btn-group returnButton"><button class="btn btn-primary" type="button"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></button></div>
 		<div id="contactButton" class="btn-group"><button class="btn btn-primary" type="button"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></button></div>
-		<div id="informationButton" class="btn-group"><button class="btn btn-primary" type="button"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></button></div>
+		<div id="informationButton" class="btn-group"><button class="btn btn-primary" type="button">Methods</button></div>
 		<div id="divEmptyButton" class="btn-group"><button class="btn btn-primary disabled" type="button">&nbsp;</button></div>
 	</div>
 	<div class="well">

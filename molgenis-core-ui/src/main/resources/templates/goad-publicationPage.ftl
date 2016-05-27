@@ -15,16 +15,16 @@
 			</div>
 			
 				<div id="analysis_info">
-					<strong> Quantitative Expression (QE)</strong> analysis can be used to determine which genes are expressed in particular cell type and to what degree. <br/>
+					<strong>Quantitative Expression (QE)</strong> analysis can be used to determine which genes are expressed in particular cell type and to what degree. <br/>
 					<strong>Differential Expression (DE)</strong> analysis can be used to generate gene lists containing differentially expressed genes with the associated log fold changes and multiple testing corrected p-values between two conditions of interest (A vs. B).
 				</div>
 			
 			<div class="btn-group btn-group-justified">
 				<div class="btn-group">
-					<button type="button" id="QEbutton" class="btn btn-default btn-lg">QE</button>
+					<button type="button" id="QEbutton" class="btn btn-default">Quantitative Expression Analysis</button>
 				</div>
 				<div class="btn-group">
-					<button type="button" id="DEbutton" class="btn btn-default btn-lg">DE</button>
+					<button type="button" id="DEbutton" class="btn btn-default">Differential Expression Analysis</button>
 				</div>
 			</div>
 			<br/>
@@ -62,7 +62,6 @@
 									</div>
 									<div id="QETable" class="col-md-12 table-scroll"></div>
 									<button type="button" id="DownloadQE" class="btn btn-primary col-md-2 col-md-offset-10"><span class="glyphicon glyphicon-save-file" aria-hidden="true"></span> Download</button>
-
 								</div>
 							</div>
 						</div>

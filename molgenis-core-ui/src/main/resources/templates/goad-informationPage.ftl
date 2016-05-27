@@ -12,10 +12,10 @@
 		<br/>
 		<h4>Datasets</h4>
 		<ul>
-			<li><a href="http://www.ebi.ac.uk/arrayexpress/experiments/E-GEOD-52946/">Butovsky et al. (2013)</a></li>
-			<li><a href="http://www.ebi.ac.uk/arrayexpress/experiments/E-GEOD-43366/">Chiu et al. (2013)</a></li>
-			<li><a href="http://www.ebi.ac.uk/arrayexpress/experiments/E-GEOD-66211/">Cronk et al. (2013)</a></li>
-			<li><a href="http://www.ebi.ac.uk/arrayexpress/experiments/E-GEOD-52564/">Zhang et al. (2014)</a></li>
+			<li><a href="http://www.ebi.ac.uk/arrayexpress/experiments/E-GEOD-52946/" target="_blank">Butovsky et al. (2013)</a></li>
+			<li><a href="http://www.ebi.ac.uk/arrayexpress/experiments/E-GEOD-43366/" target="_blank">Chiu et al. (2013)</a></li>
+			<li><a href="http://www.ebi.ac.uk/arrayexpress/experiments/E-GEOD-66211/" target="_blank">Cronk et al. (2013)</a></li>
+			<li><a href="http://www.ebi.ac.uk/arrayexpress/experiments/E-GEOD-52564/" target="_blank">Zhang et al. (2014)</a></li>
 		</ul>
 
 	</div>

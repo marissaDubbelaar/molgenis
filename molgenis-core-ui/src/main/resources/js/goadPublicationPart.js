@@ -184,9 +184,9 @@ $(document).ready(function () {
 
 	$("#DownloadQE").click(function (e) {
 		// Obtaining information from the header and the table body.
-		var tableHeader = $('#hiddenQETable>table>thead').find('tr:has(th)');
-	    var tableRows = $('#hiddenQETable>table').find('tr:has(td)');
-
+		var tableHeader = $('#QETable>table>thead').find('tr:has(th)');
+	    var tableRows = $('#QETable>table').find('tr:has(td)');
+	    
 	    // Temporary delimiter characters unlikely to be typed by keyboard
 	    // This is to avoid accidentally splitting the actual contents
 	    tmpColDelim = String.fromCharCode(11); // vertical tab character
@@ -201,8 +201,9 @@ $(document).ready(function () {
 
 		// Making sure that the content is downloaded with the given name "QE_content"
     	var downloadLink = document.createElement("a");
-    	downloadLink.download="QE_content";
-    	downloadLink.href = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csv.replace(/"\"/g, '"'));
+		var blob = new Blob([csv.replace(/"\"/g, '"')], {type: "text/plain;charset=utf-8"});
+		downloadLink.href = window.URL.createObjectURL(blob);
+		downloadLink.download = "QE_content";
     	downloadLink.click();
 	});
 	
