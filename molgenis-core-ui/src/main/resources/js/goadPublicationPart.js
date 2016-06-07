@@ -1,3 +1,9 @@
+/*
+ * Code written in this javascript document is used to perform features of the publication part of GOAD.
+ * @Author Mldubbelaar
+ */
+
+
 $(document).ready(function () {
 	
 	//-------------------------------------------------//
@@ -62,7 +68,6 @@ $(document).ready(function () {
 	//When clicking upon the DE button.
 	$("body").on("click", "#DEbutton", function(){
 		// QE content that might be visible is hidden.
-		$("#QE_info").hide();
 		$("#analysis_info").hide();
 		$("#QE_content").hide();
 		$("#searchBar_QE").hide();
@@ -85,15 +90,13 @@ $(document).ready(function () {
 		hideQE();
 		$("#s2id_selectConditions").show();
 		$("#selectBar").show();
-		$("#DE_info").show();
 	});
 
 	$("body").on("click", "#submitDEbutton", function(){
 		// The table-scroll is emptied when clicking the DE submit button
 		// and the for-control is reset.
-		$("#DE_info").hide();
+		$("#firstCondition").remove();
 		$(".table-scroll").empty();
-		$("#firstCondition").empty();
 		$(".form-control").trigger("reset");
 		// When there are two conditions chosen the API for the scatterplot and the DE table is called.
 		var count = $("#selectConditions :selected").length;
@@ -105,8 +108,7 @@ $(document).ready(function () {
 						var data = data["items"];
 						$(".row.DE").append("<div id='firstCondition' class='col-md-11 col-md-offset-1 DE'><b>"+ capitalizeEachWord(data[0]["Description"].replace(/-|_/g,' ')) + "</b></div>")
 			});
-			
-			$.get("/scripts/New_DE_ScatterPlot/run?entityName="+GEODOnPage[0].replace(/-/g,'')+"&condition1="+$("#selectConditions").val()[0]+"&condition2="+$("#selectConditions").val()[1]+"&targetFile="+GEODOnPage[0].replace(/-/g,'')+"_targets&organism="+organismOnPage[0].replace(/ /g, "+")).done(
+			$.get("/scripts/DE_ScatterPlot/run?entityName="+GEODOnPage[0].replace(/-/g,'')+"&condition1="+$("#selectConditions").val()[0]+"&condition2="+$("#selectConditions").val()[1]+"&targetFile="+GEODOnPage[0].replace(/-/g,'')+"_targets&organism="+organismOnPage[0].replace(/ /g, "+")).done(
 				function(data){
 					// The necessary information from the scatterD3 plot is obtained
 		   			var regexData = /(\<div id="htmlwidget_container"\>\n[A-z0-9 \n\<\=\"\-\:\;\>\/\!\.]+)\<script type="application\/json" data-for="htmlwidget.+\>(\{.+\})/g;
@@ -119,12 +121,12 @@ $(document).ready(function () {
 						render('#scatterplot', obj.x);
 						// The extra div that is created by the render function is removed.
 						$('div[id^="htmlwidget"]').remove()
-						// The column name which is used for the legend is replaced bij 'p-value'.
+						// The column name which is used for the legend is replaced by 'p-value'.
 						$('text.color-legend-label').text('p-value')
 					}
 				});
-			
-			$.get("/scripts/New_DE_table/run?entityName="+GEODOnPage[0].replace(/-/g,'')+"&condition1="+$("#selectConditions").val()[0]+"&condition2="+$("#selectConditions").val()[1]+"&targetFile="+GEODOnPage[0].replace(/-/g,'')+"_targets&organism="+organismOnPage[0].replace(/ /g, "+")).done(
+
+			$.get("/scripts/DE_table/run?entityName="+GEODOnPage[0].replace(/-/g,'')+"&condition1="+$("#selectConditions").val()[0]+"&condition2="+$("#selectConditions").val()[1]+"&targetFile="+GEODOnPage[0].replace(/-/g,'')+"_targets&organism="+organismOnPage[0].replace(/ /g, "+")).done(
 					function(data){
 						if (data.startsWith('Login success[1] "No differentially expressed genes where found')) {
 							$("#NoDEGMessage").show();
@@ -289,10 +291,14 @@ $(document).ready(function () {
 	});
 
 	$("body").on("click", ".TpmVals", function(){
+		// The TPM values are obtained when a gene is clicked within the TPM matrix.
+		// In the end showing the interactive bargraph of the gene.
 		obtainTPMofGenes(GEODOnPage[0].replace(/-/g,''), $(this).attr("id"));
 		});
 
 	$("body").on("click", "#searchGeneBarGraph", function(){
+		// The right gene annotation is used when selecting either mouse or human with the gene searchbar.
+		// This annotation is used to obtain the gene.
 		if (organismOnPage[0] === "Homo sapiens") {
 			obtainTPMofGenes(GEODOnPage[0].replace(/-/g,''), $("#geneBarGraph").val().toUpperCase());
 		} else if (organismOnPage[0] === "Mus musculus") {
@@ -301,193 +307,15 @@ $(document).ready(function () {
 	});
 
 	$("body").on("click", "#searchGeneTable", function(){
+		// The pattern given in the search bar is used to match the beginning of genes 
 		var rex = new RegExp("^"+$("#geneTableQE").val(), 'i');
+		// All of the content within the table is hidden
 		$('.searchable tr').hide();
+		// Genes that match the regex pattern are shown
 		$('.searchable tr').filter(function () {
 			return rex.test($(this).text());
 		}).show();
 
 	});
 	
-	$("body").on("click", "#returnToTPMTable", function(){
-		$("#QETable").show()
-		$("#QEsearch").show();
-		$("#returnToTPMTable").hide()
-		$('#TPMdiv').empty();
-	});
-	
 });
-
-function hideDE(){
-	// DE data is hidden.
-	$("#selectBar").hide();
-	$("#selectConditions").hide();
-	$("#scatterplot").hide();
-	$("#searchBar_DE").hide();
-	$("#DETable").hide();
-}
-
-function hideQE(){
-	// QE data is hidden.
-	$("#QEsearch").hide();
-	$("#QETable").hide();
-	$("#QE_content").hide();
-}
-
-function exportTableInfo(rowTable, columnRecog) {
-	// Grab text from table into CSV formatted string
-	// Obtain the different columns within the row
-	return '"' + rowTable.map(function (i, row) {
-			var $row = $(row);
-			$cols = $row.find(columnRecog);
-
-			// Obtains the text from the column of the row
-			return $cols.map(function (j, col) {
-				var $col = $(col);
-					text = $col.text();
-
-				return text.replace(/"/g, ''); // escape double quotes
-
-		}).get().join(tmpColDelim)
-		}).get().join(tmpRowDelim)
-		.split(tmpRowDelim).join(rowDelim)
-		.split(tmpColDelim).join(colDelim) + '"';
-}
-
-function obtainTPMofGenes(study, genes) {
-	// This function is used to preprocess the data for the creation of the bar graph.
-	var dict = {};
-	// The gene is searched within the given study.
-	$.get("/api/v2/TPM_" + study + "?q=external_gene_name==" + genes).done(function(data){
-		// The div with id "TPMdiv" is empied.
-		$('#TPMdiv').empty();
-		// The attributes are obtained from the meta data and the items are obtained.
-		var attr = data.meta["attributes"];
-		var data = data["items"];
-		$.each(data, function(i, content){
-			$.each(attr, function(t, types){
-				if (t === 0) {
-					// The gene name is obtained and written into the div with id "TPMdiv"
-					$("#TPMdiv").html("<h4>"+data[i][attr[t]["name"]]+"</h4>")
-				} else if (t % 4 === 1 && t !== 0) {
-					// The cell type is obtained.
-					if (attr[t]["name"].length > 4){
-						// Cell type names with a length > 4 are capitalized.
-						dict["Gene"] = capitalizeEachWord(attr[t]["name"].replace(/_/g, " "))
-					} else {
-						// Cell type names with a length < 4 are seen as an abbreviation and therefore written in uppercase.
-						dict["Gene"] = attr[t]["name"].replace(/_/g, " ").toUpperCase()
-					}
-					// The 'normal' TPM value is added into the dict 'dict'.
-					dict["TPM"] = data[i][attr[t]["name"]]
-				} else if (t % 4 === 2 && t !== 0) {
-					// Information on position 2 when performing t % 4 are saved as the low TPM values.
-					dict["Low_TPM"] = data[i][attr[t]["name"]]
-				} else if (t % 4 === 3 && t !== 0) {
-					// Information on position 3 when performing t % 4 are saved as the high TPM values.
-					dict["High_TPM"] = data[i][attr[t]["name"]]
-				} else if (t % 4 === 0 && t != 0) {
-					// Information on position 0 when performing t % 4 are saved as the percentiles.
-					dict["Percentile"] = data[i][attr[t]["name"]]
-					// All of the information is pushed to the array bargraphData
-					bargraphData.push(dict)
-					// The dict 'dict' is empied when in the end.
-					if (t !== attr.length) {
-						dict = {};
-					} 
-				}
-			});
-		});
-		// The function createBarGraph is called to create the bargraph
-		createBarGraph();
-		// The tab with the bargraph is opened when the bargraph is made.
-		$('#QE_tabs a[href="#barGraph"]').tab('show')
-		// Emptying the array bargraphData in the end. 
-		bargraphData = [];
-		});
-}
-
-// The function render is a function from scatterD3.js
-// It contains some small adjustments to work on the GOAD website.
-function render(el, obj) {
-	var width = 600;
-	var height = 400;
-	if (width < 0) width = 0;
-    if (height < 0) height = 0;
-    // Create root svg element
-    var svg = d3.select(el).append("svg");
-    svg
-    .attr("width", width)
-    .attr("height", height)
-    .attr("class", "scatterD3")
-    .append("style")
-    .text(".scatterD3 {font: 10px sans-serif;}" +
-    ".scatterD3 .axis line, .axis path { stroke: #000; fill: none; shape-rendering: CrispEdges;} " +
-    ".scatterD3 .axis .tick line { stroke: #ddd;} " +
-    ".scatterD3 .axis text { fill: #000; } " +
-    ".scatterD3 .zeroline { stroke-width: 1; stroke: #444; stroke-dasharray: 5,5;} ");
-
-    // Create tooltip content div
-    var tooltip = d3.select(".scatterD3-tooltip");
-    if (tooltip.empty()) {
-        tooltip = d3.select("body")
-        .append("div")
-        .style("visibility", "hidden")
-        .attr("class", "scatterD3-tooltip");
-    }
-
-    // Create scatterD3 instance
-    scatter = scatterD3().width(width).height(height).svg(svg);
-	
-    // Check if update or redraw
-    var first_draw = (Object.keys(scatter.settings()).length === 0);
-    var redraw = first_draw || !obj.settings.transitions;
-    var svg = d3.select(el).select("svg").attr("id", "scatterD3-svg-" + obj.settings.html_id);
-    scatter = scatter.svg(svg);
-
-    // convert data to d3 format
-    data = HTMLWidgets.dataframeToD3(obj.data);
-
-    // If no transitions, remove chart and redraw it
-    if (!obj.settings.transitions) {
-        svg.selectAll("*:not(style)").remove();
-    }
-
-    // Complete draw
-    if (redraw) {
-        scatter = scatter.data(data, redraw);
-        obj.settings.redraw = true;
-        scatter = scatter.settings(obj.settings);
-        // add controls handlers and global listeners for shiny apps
-        scatter.add_controls_handlers();
-        scatter.add_global_listeners();
-        // draw chart
-        d3.select(el)
-          .call(scatter);
-    }
-    // Update only
-    else {
-        // Check what did change
-        obj.settings.has_legend_changed = scatter.settings().has_legend != obj.settings.has_legend;
-        obj.settings.has_labels_changed = scatter.settings().has_labels != obj.settings.has_labels;
-        obj.settings.size_range_changed = scatter.settings().size_range != obj.settings.size_range;
-        obj.settings.ellipses_changed = scatter.settings().ellipses != obj.settings.ellipses;
-        function changed(varname) {
-            return obj.settings.hashes[varname] != scatter.settings().hashes[varname];
-        };
-        obj.settings.x_changed = changed("x");
-        obj.settings.y_changed = changed("y");
-        obj.settings.lab_changed = changed("lab");
-        obj.settings.legend_changed = changed("col_var") || changed("symbol_var") ||
-                                      changed("size_var") || obj.settings.size_range_changed;
-        obj.settings.data_changed = obj.settings.x_changed || obj.settings.y_changed ||
-                                    obj.settings.lab_changed || obj.settings.legend_changed ||
-                                    obj.settings.has_labels_changed || changed("ellipses_data") ||
-                                    obj.settings.ellipses_changed;
-        obj.settings.opacity_changed = changed("point_opacity");
-        obj.settings.subset_changed = changed("key_var");
-        scatter = scatter.settings(obj.settings);
-        // Update data only if needed
-        if (obj.settings.data_changed) scatter = scatter.data(data, redraw);
-    }
-}

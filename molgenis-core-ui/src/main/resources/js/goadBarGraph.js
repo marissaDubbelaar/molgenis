@@ -1,3 +1,8 @@
+/*
+ * Code written in this javascript document is a modification from the following code: https://bl.ocks.org/mbostock/3887051
+ * @Author Mldubbelaar
+ */
+
 function createBarGraph(){
 	// The size of the bar graph is defined.
 	var margin = {top: 70, right: 20, bottom: 30, left: 40},

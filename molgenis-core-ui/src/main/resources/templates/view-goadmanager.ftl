@@ -1,8 +1,8 @@
 <#include "molgenis-header.ftl">
 <#include "molgenis-footer.ftl">
 
-<#assign css=["goad.css", "lasso.css", "scatterD3.css", "jquery-ui.css"]>
-<#assign js=["goadmanager.js", "d3-legend.min.js", "htmlwidgets.js", "lasso.js", "scatterD3.js", "goadPublicationPart.js", "goadBarGraph.js", "jquery-ui.js", "sorttable.js"]>
+<#assign css=["goad.css", "lasso.css", "scatterD3.css", "jquery-ui.css", "QE_Bargrpah.css","QE_Dashboard.css"]>
+<#assign js=["goadmanager.js", "goadPublicationPart.js", "goadBarGraph.js", "goadFunctions.js", "goadDashboard.js", "d3-legend.min.js", "htmlwidgets.js", "lasso.js", "scatterD3.js", "jquery-ui.js", "sorttable.js"]>
 
 <@header css js/>
 <div class="container">
