@@ -1,7 +1,7 @@
 <#include "molgenis-header.ftl">
 <#include "molgenis-footer.ftl">
 
-<#assign css=["goad.css", "lasso.css", "scatterD3.css", "jquery-ui.css", "QE_Bargrpah.css","QE_Dashboard.css"]>
+<#assign css=["goad.css", "lasso.css", "scatterD3.css", "jquery-ui.css", "QE_Bargraph.css","QE_Dashboard.css"]>
 <#assign js=["goadmanager.js", "goadPublicationPart.js", "goadBarGraph.js", "goadFunctions.js", "goadDashboard.js", "d3-legend.min.js", "htmlwidgets.js", "lasso.js", "scatterD3.js", "jquery-ui.js", "sorttable.js"]>
 
 <@header css js/>
@@ -96,7 +96,7 @@
 	</div>
 	
 	<div class="panel panel-default">
-		<div class="panel-footer">Copyright &copy; 2014</div>
+		<div class="panel-footer">Copyright &copy; 2016</div>
 	</div>
 </div>
 <@footer/>
