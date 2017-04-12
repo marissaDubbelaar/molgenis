@@ -167,7 +167,6 @@ function obtainTPMofGenes(study, genes) {
 		});
 }
 
-
 // The function render is a function from scatterD3.js
 // It contains some small adjustments to work on the GOAD website.
 function render(el, obj) {
