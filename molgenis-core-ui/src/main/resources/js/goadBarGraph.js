@@ -19,34 +19,35 @@ function createBarGraph(){
 
 	// Colors for the columns is defined.
 	var color = d3.scale.ordinal()
-		.domain(["0-5 percentile: very high expression", 
-				"5-10 percentile: high expression",
-				"10-20 percentile: moderately high expression",
-				"20-30 percentile: moderately high expression",
-				"30-40 percentile: moderate expression",
-				"40-50 percentile: moderate expression",
-				"50-60 percentile: moderate expression",
-				"60-70 percentile: low expression",
-				"70-80 percentile: low expression",
-				"80-90 percentile: low expression",
-				"90-100 percentile: very low expression",
-				"Not significantly expressed",
-				"Not expressed"
+		.domain([
+			"Not expressed",
+			  "Not significantly expressed",
+			  "90-100 percentile: very low expression",
+			  "80-90 percentile: low expression",
+			  "70-80 percentile: low expression",
+			  "60-70 percentile: low expression",
+			  "50-60 percentile: moderate expression",
+			  "40-50 percentile: moderate expression",
+			  "30-40 percentile: moderate expression",
+			  "20-30 percentile: moderately high expression",
+			  "10-20 percentile: moderately high expression",
+			  "5-10 percentile: high expression",
+			  "0-5 percentile: very high expression"
 	  			])
 	    .range([
-	    		"#ff0000", 		//Red	
-				"#ff6600",		//Orange
-				"#ffff00", 		//Yellow
-				"#ccff33", 		//Greenyellow 	
-				"#66ff33", 		//Green
-				"#66ffff", 		//Turqoise
-				"#33ccff", 		//Darkturqoise
-				"#0000ff", 		//Blue
-				"#000099", 		//Darkblue
-				"#3333cc", 		//Midnightblue	    		
-				"#000000", 		//Black	 
-				"#666666", 		//Dark Grey	   
-				"#cccccc"		//Grey	      		
+	    	"#cccccc",		//Grey	 
+	    	"#666666", 		//Dark Grey	
+	    	"#000000", 		//Black	 
+	    	"#3333cc", 		//Midnightblue	 
+	    	"#000099", 		//Darkblue
+	    	"#0000ff", 		//Blue
+	    	"#33ccff", 		//Darkturqoise
+	    	"#66ffff", 		//Turqoise
+	    	"#66ff33", 		//Green
+	    	"#ccff33", 		//Greenyellow 
+	    	"#ffff00", 		//Yellow
+	    	"#ff6600",		//Orange
+	    	"#ff0000", 		//Red	 		
 				]); 	
 
 	// X axis is defined.
@@ -88,19 +89,19 @@ function createBarGraph(){
 	  var tpmTypes = ["TPM"];
 	  // var tpmTypes = ["Percentile"];
 	  var percentileTypes = [
-							"0-5 percentile: very high expression", 
-	  						"5-10 percentile: high expression",
-	  						"10-20 percentile: moderately high expression",
-	  						"20-30 percentile: moderately high expression",
-	  						"30-40 percentile: moderate expression",
-	  						"40-50 percentile: moderate expression",
-	  						"50-60 percentile: moderate expression",
-	  						"60-70 percentile: low expression",
-	  						"70-80 percentile: low expression",
-	  						"80-90 percentile: low expression",
-	  						"90-100 percentile: very low expression",
-	  						"Not significantly expressed",
-	  						"Not expressed"];
+		  "Not expressed",
+		  "Not significantly expressed",
+		  "90-100 percentile: very low expression",
+		  "80-90 percentile: low expression",
+		  "70-80 percentile: low expression",
+		  "60-70 percentile: low expression",
+		  "50-60 percentile: moderate expression",
+		  "40-50 percentile: moderate expression",
+		  "30-40 percentile: moderate expression",
+		  "20-30 percentile: moderately high expression",
+		  "10-20 percentile: moderately high expression",
+		  "5-10 percentile: high expression",
+		  "0-5 percentile: very high expression"];
 
 	  // The tpmVals are obtained.
 	  bargraphData.forEach(function(d) {
