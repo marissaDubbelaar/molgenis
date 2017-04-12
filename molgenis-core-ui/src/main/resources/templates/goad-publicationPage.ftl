@@ -1,4 +1,5 @@
 <div id="publicationPart">
+	<div class="loader"></div>
 	<div id="informationStudy"></div>
 	<button type="button" class="btn btn-primary btn-block" id="RnaSeq" type="button" data-toggle="collapse" data-target="#rnaSeqCollapse" aria-expanded="false" aria-controls="rnaSeqCollapse">RNA Sequencing</button>
 	<div class="collapse" id="rnaSeqCollapse">
