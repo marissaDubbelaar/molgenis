@@ -151,6 +151,7 @@ function obtainTPMofGenes(study, genes) {
 					dict["Percentile"] = data[i][attr[t]["name"]]
 					// All of the information is pushed to the array bargraphData
 					bargraphData.push(dict)
+					console.log(dict)
 					// The dict 'dict' is empied when in the end.
 					if (t !== attr.length) {
 						dict = {};
