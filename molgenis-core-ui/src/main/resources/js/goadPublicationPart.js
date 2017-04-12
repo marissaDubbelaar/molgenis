@@ -102,7 +102,7 @@ $(document).ready(function () {
 		var count = $("#selectConditions :selected").length;
 		if (count === 2) {
 			var tableContent = [];
-			
+			$(".loader").fadeIn("slow");
 			$.get("/api/v2/"+GEODOnPage[0].replace(/-/g,'')+"_targets?q=SRA=="+$("#selectConditions").val()[1]).done(
 					function(data){ 
 						var data = data["items"];
@@ -174,6 +174,7 @@ $(document).ready(function () {
 				}
 
 				});
+			$(".loader").fadeOut("slow");
 			} else {
 				// An error is given when there is only one condition to choose from.
 				$("#errorLengthForSubmit").show();
